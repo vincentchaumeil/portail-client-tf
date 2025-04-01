@@ -32,7 +32,14 @@ const AppTopbar: React.FC<AppTopbarProps> = ({ title }) => {
   
   return (
     <header className="h-16 bg-white shadow-sm px-8 between-flex">
-      <h1 className="text-2xl font-semibold text-default">{title}</h1>
+      <div className="flex items-center space-x-4">
+        <img 
+          src="https://www.transfact.de/wp-content/uploads/logo_transfact_retina.png" 
+          alt="Transfact Logo" 
+          className="h-10 w-auto object-contain"
+        />
+        <h1 className="text-2xl font-semibold text-default">{title}</h1>
+      </div>
       
       <div className="flex items-center text-muted-foreground">
         <Clock className="h-4 w-4 mr-2" />
