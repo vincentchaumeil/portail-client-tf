@@ -64,30 +64,38 @@ const OrdersContainer: React.FC<OrdersContainerProps> = ({ orders }) => {
   
   return (
     <div className="relative">
+      <div className="flex justify-between items-center mb-8">
+        <h2 className="text-xl font-semibold">Liste des commandes ({filteredOrders.length})</h2>
+      </div>
+      
       {/* Filters and search */}
-      <div className="between-flex mb-6">
+      <div className="between-flex mb-8">
         <div className="flex gap-3">
           <Button 
             variant={activeFilter === 'all' ? 'default' : 'outline'}
             onClick={() => setActiveFilter('all')}
+            className="transition-all-300"
           >
             Tous
           </Button>
           <Button 
             variant={activeFilter === 'in-progress' ? 'default' : 'outline'}
             onClick={() => setActiveFilter('in-progress')}
+            className="transition-all-300"
           >
             En cours
           </Button>
           <Button 
             variant={activeFilter === 'shipped' ? 'default' : 'outline'}
             onClick={() => setActiveFilter('shipped')}
+            className="transition-all-300"
           >
             Expédiée
           </Button>
           <Button 
             variant={activeFilter === 'delivered' ? 'default' : 'outline'}
             onClick={() => setActiveFilter('delivered')}
+            className="transition-all-300"
           >
             Livrée
           </Button>
@@ -98,22 +106,28 @@ const OrdersContainer: React.FC<OrdersContainerProps> = ({ orders }) => {
             placeholder="Rechercher une commande..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-10"
+            className="pl-10 transition-all-300 focus:ring-2 focus:ring-primary focus:border-transparent"
           />
           <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
         </div>
       </div>
       
-      {/* Order cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {filteredOrders.map(order => (
-          <OrderCard
-            key={order.id}
-            order={order}
-            isActive={order.id === selectedOrderId}
-            onClick={() => setSelectedOrderId(order.id === selectedOrderId ? null : order.id)}
-          />
-        ))}
+      {/* Order cards with increased gap */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {filteredOrders.length > 0 ? (
+          filteredOrders.map(order => (
+            <OrderCard
+              key={order.id}
+              order={order}
+              isActive={order.id === selectedOrderId}
+              onClick={() => setSelectedOrderId(order.id === selectedOrderId ? null : order.id)}
+            />
+          ))
+        ) : (
+          <div className="col-span-2 py-12 text-center text-muted-foreground">
+            Aucune commande ne correspond à vos critères de recherche
+          </div>
+        )}
       </div>
       
       {/* Detail panel */}
