@@ -1,7 +1,7 @@
-
 import React from 'react';
 import { Home, User, LifeBuoy, LogOut } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import Logo from './Logo';
 
 interface SidebarItemProps {
   icon: React.ElementType;
@@ -26,8 +26,8 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ icon: Icon, label, active }) 
 const AppSidebar: React.FC = () => {
   return (
     <aside className="w-64 min-h-screen bg-white border-r border-gray-200 py-8 flex flex-col">
-      <div className="mb-10 px-5">
-        <h2 className="text-xl font-bold text-primary">B2B Portal</h2>
+      <div className="mb-10 px-5 flex justify-center">
+        <Logo size="medium" />
       </div>
       
       <div className="flex-1">
