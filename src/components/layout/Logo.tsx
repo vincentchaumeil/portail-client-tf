@@ -14,11 +14,13 @@ const Logo: React.FC<LogoProps> = ({ size = 'medium', className = '' }) => {
   };
 
   return (
-    <img 
-      src="https://www.transfact.de/wp-content/uploads/logo_transfact_retina.png" 
-      alt="Transfact Logo" 
-      className={`w-auto object-contain ${sizeClasses[size]} ${className}`}
-    />
+    <div className={`transition-transform duration-300 hover:scale-105 ${className}`}>
+      <img 
+        src="https://www.transfact.de/wp-content/uploads/logo_transfact_retina.png" 
+        alt="Transfact Logo" 
+        className={`w-auto object-contain drop-shadow-sm ${sizeClasses[size]}`}
+      />
+    </div>
   );
 };
 
