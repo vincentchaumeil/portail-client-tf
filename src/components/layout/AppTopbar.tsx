@@ -31,12 +31,12 @@ const AppTopbar: React.FC<AppTopbarProps> = ({ title }) => {
   };
   
   return (
-    <header className="h-16 bg-white shadow-sm px-8 between-flex">
+    <header className="h-16 bg-white/80 backdrop-blur-sm border-b border-gray-100 px-8 between-flex sticky top-0 z-10 shadow-sm">
       <div className="flex items-center">
-        <h1 className="text-2xl font-semibold text-primary-dark transition-colors hover:text-primary">{title}</h1>
+        <h1 className="text-2xl font-semibold text-primary-dark transition-colors hover:text-primary bg-gradient-to-r from-primary-dark to-primary bg-clip-text text-transparent">{title}</h1>
       </div>
       
-      <div className="flex items-center text-muted-foreground hover:text-primary transition-colors bg-gray-50 px-3 py-1.5 rounded-full">
+      <div className="flex items-center text-muted-foreground hover:text-primary transition-colors bg-gray-50/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-sm">
         <Clock className="h-4 w-4 mr-2" />
         <span className="text-sm font-medium">{currentTime}</span>
       </div>

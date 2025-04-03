@@ -10,12 +10,12 @@ interface StatusBadgeProps {
 }
 
 const StatusBadge: React.FC<StatusBadgeProps> = ({ status, className }) => {
-  const baseClasses = "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium";
+  const baseClasses = "inline-flex items-center px-3 py-1 rounded-full text-xs font-medium shadow-sm";
   
   const statusStyles = {
-    'en cours': "bg-blue-100 text-blue-800",
-    'expédiée': "bg-orange-100 text-orange-800",
-    'livrée': "bg-green-100 text-green-800"
+    'en cours': "bg-blue-50 text-blue-700 border border-blue-100",
+    'expédiée': "bg-orange-50 text-orange-700 border border-orange-100",
+    'livrée': "bg-green-50 text-green-700 border border-green-100"
   };
   
   return (

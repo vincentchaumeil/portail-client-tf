@@ -18,7 +18,7 @@ const Logo: React.FC<LogoProps> = ({ size = 'medium', className = '' }) => {
       <img 
         src="https://www.transfact.de/wp-content/uploads/logo_transfact_retina.png" 
         alt="Transfact Logo" 
-        className={`w-auto object-contain drop-shadow-md ${sizeClasses[size]}`}
+        className={`w-auto object-contain drop-shadow-lg ${sizeClasses[size]}`}
       />
     </div>
   );

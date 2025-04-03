@@ -16,13 +16,13 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, isActive, onClick }) => {
   return (
     <div 
       className={cn(
-        "bg-white border rounded-lg p-5 cursor-pointer transition-all duration-300 shadow-sm hover:shadow-md",
-        isActive && "ring-2 ring-primary"
+        "bg-white border rounded-xl p-6 cursor-pointer transition-all duration-300 hover:shadow-md hover:translate-y-[-2px]",
+        isActive ? "ring-2 ring-primary shadow-md" : "shadow-sm"
       )}
       onClick={onClick}
     >
       <div className="between-flex mb-4">
-        <h3 className="text-lg font-semibold text-primary-dark">Commande #{order.orderNumber}</h3>
+        <h3 className="text-lg font-semibold text-primary-dark bg-gradient-to-r from-primary-dark to-primary bg-clip-text text-transparent">Commande #{order.orderNumber}</h3>
         <StatusBadge status={order.status} />
       </div>
       
@@ -34,7 +34,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, isActive, onClick }) => {
         </div>
       </div>
       
-      <div className="flex flex-col space-y-2 mt-4 text-sm text-muted-foreground">
+      <div className="flex flex-col space-y-2 mt-5 text-sm text-muted-foreground">
         <div className="flex items-center">
           <CalendarDays size={14} className="mr-2 text-gray-400" />
           <span>{order.date}</span>
