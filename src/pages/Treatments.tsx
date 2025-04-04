@@ -9,6 +9,7 @@ import { mockTreatments, getOrdersByTreatment } from '@/data/mockTreatments';
 import { Treatment, TreatmentType, Order } from '@/types';
 import OrderCard from '@/components/orders/OrderCard';
 import OrderDetailPanel from '@/components/orders/OrderDetailPanel';
+import { ArrowRight } from 'lucide-react';
 
 const Treatments = () => {
   const [selectedTreatment, setSelectedTreatment] = useState<TreatmentType | null>(null);
@@ -46,7 +47,7 @@ const Treatments = () => {
         className="flex-1 overflow-auto p-6 md:p-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }} // Reduced animation time
+        transition={{ duration: 0.3 }}
       >
         <div className="max-w-7xl mx-auto">
           <h1 className="text-2xl font-bold mb-6">Traitements disponibles</h1>
@@ -161,7 +162,7 @@ const TreatmentCard: React.FC<TreatmentCardProps> = ({ treatment, isSelected, on
       </div>
       <div className="bg-blue-50 px-6 py-3 flex justify-between items-center">
         <span className="text-primary text-sm font-medium">
-          {ordersCount} {ordersCount <= 1 ? 'commande' : 'commandes'}
+          {ordersCount} {ordersCount === 1 ? 'commande' : 'commandes'}
         </span>
         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
           isSelected ? 'bg-primary text-white' : 'bg-primary/10 text-primary'
@@ -174,3 +175,4 @@ const TreatmentCard: React.FC<TreatmentCardProps> = ({ treatment, isSelected, on
 };
 
 export default Treatments;
+
