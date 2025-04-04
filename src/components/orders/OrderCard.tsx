@@ -3,7 +3,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import StatusBadge from './StatusBadge';
 import { Order } from '@/types';
-import { format } from 'date-fns';
+import { format, parse } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { ArrowRight } from 'lucide-react';
 import { usePreferences } from '@/hooks/use-preferences';
@@ -26,6 +26,21 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onClick, isActive }) => {
   };
   
   const compactClass = preferences.compactView ? 'py-2' : 'py-3';
+  
+  // Parse the date string to a Date object before formatting
+  const parseDate = (dateString: string) => {
+    try {
+      // Check if the date is in DD/MM/YYYY format
+      if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateString)) {
+        return parse(dateString, 'dd/MM/yyyy', new Date());
+      }
+      // If it's already a valid date string, just create a new Date object
+      return new Date(dateString);
+    } catch (error) {
+      console.error("Error parsing date:", error);
+      return new Date(); // Fallback to current date
+    }
+  };
   
   return (
     <Card 
@@ -53,7 +68,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onClick, isActive }) => {
         <div className="flex justify-between items-center">
           <div>
             <p className={`text-muted-foreground ${getFontSizeClass()}`}>
-              {format(new Date(order.date), 'PPP', { locale: fr })}
+              {format(parseDate(order.date), 'PPP', { locale: fr })}
             </p>
             <p className={`font-medium ${getFontSizeClass()}`}>{order.clientName}</p>
             
