@@ -1,9 +1,44 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import AppTopbar from '@/components/layout/AppTopbar';
 import AppLayout from '@/components/layout/AppLayout';
 import { motion } from 'framer-motion';
+import { Card } from '@/components/ui/card';
+import { mockOrders } from '@/data/mockOrders';
+import { mockTreatments, getOrdersByTreatment } from '@/data/mockTreatments';
+import { Treatment as TreatmentType, Order } from '@/types';
+import OrderCard from '@/components/orders/OrderCard';
+import OrderDetailPanel from '@/components/orders/OrderDetailPanel';
 
 const Treatments = () => {
+  const [selectedTreatment, setSelectedTreatment] = useState<TreatmentType | null>(null);
+  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
+  
+  const filteredOrders = selectedTreatment 
+    ? getOrdersByTreatment(mockOrders, selectedTreatment)
+    : [];
+  
+  const selectedOrder = selectedOrderId
+    ? mockOrders.find(order => order.id === selectedOrderId)
+    : null;
+    
+  // Navigation between orders in detail panel
+  const handlePreviousOrder = () => {
+    if (!selectedOrderId) return;
+    const currentIndex = filteredOrders.findIndex(order => order.id === selectedOrderId);
+    if (currentIndex > 0) {
+      setSelectedOrderId(filteredOrders[currentIndex - 1].id);
+    }
+  };
+  
+  const handleNextOrder = () => {
+    if (!selectedOrderId) return;
+    const currentIndex = filteredOrders.findIndex(order => order.id === selectedOrderId);
+    if (currentIndex < filteredOrders.length - 1) {
+      setSelectedOrderId(filteredOrders[currentIndex + 1].id);
+    }
+  };
+
   return (
     <AppLayout>
       <AppTopbar title="Traitements" />
@@ -11,84 +46,107 @@ const Treatments = () => {
         className="flex-1 overflow-auto p-6 md:p-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
+        transition={{ duration: 0.3 }} // Reduced animation time
       >
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <h1 className="text-2xl font-bold mb-6">Traitements disponibles</h1>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {treatmentOptions.map((treatment) => (
-              <TreatmentCard key={treatment.id} treatment={treatment} />
+            {mockTreatments.map((treatment) => (
+              <TreatmentCard 
+                key={treatment.id} 
+                treatment={treatment}
+                isSelected={selectedTreatment === treatment.name}
+                onClick={() => {
+                  setSelectedTreatment(prev => prev === treatment.name ? null : treatment.name);
+                  setSelectedOrderId(null);
+                }}
+                ordersCount={getOrdersByTreatment(mockOrders, treatment.name).length}
+              />
             ))}
           </div>
+          
+          {/* Orders related to selected treatment */}
+          {selectedTreatment && (
+            <div className="mt-10">
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-xl font-semibold">
+                  Commandes avec traitement "{selectedTreatment}" ({filteredOrders.length})
+                </h2>
+              </div>
+              
+              {filteredOrders.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {filteredOrders.map(order => (
+                    <OrderCard
+                      key={order.id}
+                      order={order}
+                      isActive={selectedOrderId === order.id}
+                      onClick={() => setSelectedOrderId(prevId => prevId === order.id ? null : order.id)}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8 bg-gray-50 rounded-lg">
+                  <p className="text-gray-500">Aucune commande trouvée pour ce traitement</p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </motion.div>
+      
+      {/* Order detail panel */}
+      <OrderDetailPanel 
+        order={selectedOrder}
+        onClose={() => setSelectedOrderId(null)}
+        onPrevious={handlePreviousOrder}
+        onNext={handleNextOrder}
+      />
     </AppLayout>
   );
 };
 
-// Treatment data
-const treatmentOptions = [
-  {
-    id: 1,
-    name: "Anodisation",
-    description: "Traitement électrochimique de surface qui permet de créer une couche d'oxyde protectrice sur l'aluminium.",
-    duration: "3-5 jours",
-    materials: ["Aluminium", "Alliages d'aluminium"],
-    icon: "⚡"
-  },
-  {
-    id: 2,
-    name: "Chromage",
-    description: "Dépôt électrolytique de chrome sur une surface métallique pour améliorer sa résistance à la corrosion et à l'usure.",
-    duration: "4-7 jours",
-    materials: ["Acier", "Cuivre", "Laiton"],
-    icon: "🔧"
-  },
-  {
-    id: 3,
-    name: "Phosphatation",
-    description: "Traitement chimique qui crée une couche de phosphate sur les métaux pour améliorer l'adhérence de la peinture.",
-    duration: "2-3 jours",
-    materials: ["Acier", "Zinc", "Aluminium"],
-    icon: "🧪"
-  },
-  {
-    id: 4,
-    name: "Nickelage",
-    description: "Dépôt électrolytique de nickel pour protéger contre la corrosion et améliorer l'aspect esthétique.",
-    duration: "3-6 jours",
-    materials: ["Acier", "Cuivre", "Laiton", "Zinc"],
-    icon: "✨"
-  },
-  {
-    id: 5,
-    name: "Zingage",
-    description: "Application d'une couche de zinc pour protéger les métaux ferreux contre la corrosion.",
-    duration: "2-4 jours",
-    materials: ["Acier", "Fer"],
-    icon: "🛡️"
-  },
-  {
-    id: 6,
-    name: "Peinture poudre",
-    description: "Application électrostatique de poudre qui est ensuite cuite pour former un revêtement durable.",
-    duration: "1-3 jours",
-    materials: ["Acier", "Aluminium", "MDF"],
-    icon: "🎨"
-  }
-];
-
 // Treatment card component
-const TreatmentCard = ({ treatment }) => {
+interface TreatmentCardProps {
+  treatment: {
+    id: string;
+    name: TreatmentType;
+    description: string;
+    duration: number;
+    price: number;
+  };
+  isSelected: boolean;
+  onClick: () => void;
+  ordersCount: number;
+}
+
+const TreatmentCard: React.FC<TreatmentCardProps> = ({ treatment, isSelected, onClick, ordersCount }) => {
+  // Icon mapping for treatments
+  const getIcon = (name: string) => {
+    switch(name) {
+      case 'Alodine': return '⚡';
+      case 'Silvering': return '✨';
+      case 'Cadmium plating': return '🛡️';
+      case 'Copper plating': return '🔶';
+      case 'Gilding': return '🌟';
+      case 'Tin-Lead plating': return '🔧';
+      case 'Tinning': return '🧩';
+      default: return '🔬';
+    }
+  };
+
   return (
     <motion.div
       whileHover={{ y: -5, boxShadow: "0 10px 20px rgba(0,0,0,0.1)" }}
-      className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-100"
+      className={`bg-white rounded-lg shadow-md overflow-hidden border ${
+        isSelected ? 'border-primary ring-2 ring-primary/20' : 'border-gray-100'
+      }`}
+      onClick={onClick}
     >
       <div className="p-6">
         <div className="flex items-center mb-4">
-          <div className="text-3xl mr-3">{treatment.icon}</div>
+          <div className="text-3xl mr-3">{getIcon(treatment.name)}</div>
           <h3 className="text-lg font-semibold text-gray-800">{treatment.name}</h3>
         </div>
         
@@ -98,20 +156,24 @@ const TreatmentCard = ({ treatment }) => {
           <div className="flex justify-between text-sm">
             <div>
               <p className="text-gray-500">Durée</p>
-              <p className="font-medium">{treatment.duration}</p>
+              <p className="font-medium">{treatment.duration}h</p>
             </div>
             <div className="text-right">
-              <p className="text-gray-500">Matériaux</p>
-              <p className="font-medium">{treatment.materials.slice(0, 2).join(", ")}{treatment.materials.length > 2 ? "..." : ""}</p>
+              <p className="text-gray-500">Prix</p>
+              <p className="font-medium">{treatment.price.toFixed(2)} €</p>
             </div>
           </div>
         </div>
       </div>
       <div className="bg-blue-50 px-6 py-3 flex justify-between items-center">
-        <span className="text-primary text-sm font-medium">Voir détails</span>
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-        </svg>
+        <span className="text-primary text-sm font-medium">
+          {ordersCount} {ordersCount <= 1 ? 'commande' : 'commandes'}
+        </span>
+        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+          isSelected ? 'bg-primary text-white' : 'bg-primary/10 text-primary'
+        }`}>
+          {isSelected ? 'Sélectionné' : 'Voir détails'}
+        </span>
       </div>
     </motion.div>
   );

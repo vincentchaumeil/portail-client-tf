@@ -8,6 +8,7 @@ import { fr } from 'date-fns/locale';
 import { ArrowRight } from 'lucide-react';
 import { usePreferences } from '@/hooks/use-preferences';
 import { motion } from 'framer-motion';
+import { Progress } from '@/components/ui/progress';
 
 interface OrderCardProps {
   order: Order;
@@ -71,7 +72,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onClick, isActive }) => {
           </div>
         </CardHeader>
         <CardContent className={`px-4 ${compactClass}`}>
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center mb-2">
             <div>
               <p className={`text-muted-foreground ${getFontSizeClass()}`}>
                 {format(parseDate(order.date), 'PPP', { locale: fr })}
@@ -98,6 +99,15 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onClick, isActive }) => {
                 <ArrowRight className="text-primary h-5 w-5" />
               </motion.div>
             )}
+          </div>
+          
+          {/* Progress bar */}
+          <div className="mt-3">
+            <div className="flex justify-between items-center mb-1">
+              <span className={`text-xs text-gray-500 ${getFontSizeClass()}`}>Progression</span>
+              <span className={`text-xs font-medium ${getFontSizeClass()}`}>{order.progressPercentage}%</span>
+            </div>
+            <Progress value={order.progressPercentage} className="h-1.5" />
           </div>
         </CardContent>
       </Card>

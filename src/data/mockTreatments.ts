@@ -1,5 +1,5 @@
 
-import { Treatment, TreatmentType } from '@/types';
+import { Treatment, TreatmentType, Order } from '@/types';
 
 export const treatmentTypes: TreatmentType[] = [
   'Alodine',
@@ -63,17 +63,22 @@ export const mockTreatments: Treatment[] = [
   }
 ];
 
-// Update some mock orders to include treatments
-export const assignTreatmentsToOrders = (orders: any[]) => {
+// Update orders to include treatments
+export const assignTreatmentsToOrders = (orders: Order[]): Order[] => {
   const updatedOrders = [...orders];
   
-  updatedOrders.forEach((order, index) => {
-    // Assign treatments to some orders (not all of them)
-    if (index % 2 === 0) {
-      const treatmentIndex = index % mockTreatments.length;
+  updatedOrders.forEach((order) => {
+    // Assign treatments to all orders
+    if (!order.treatment) {
+      const treatmentIndex = Math.floor(Math.random() * mockTreatments.length);
       order.treatment = mockTreatments[treatmentIndex];
     }
   });
   
   return updatedOrders;
+};
+
+// Get orders filtered by treatment type
+export const getOrdersByTreatment = (orders: Order[], treatmentName: TreatmentType): Order[] => {
+  return orders.filter(order => order.treatment?.name === treatmentName);
 };
