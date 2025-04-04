@@ -1,11 +1,12 @@
 
 import React from 'react';
-import AppSidebar from '@/components/layout/AppSidebar';
 import AppTopbar from '@/components/layout/AppTopbar';
 import OrdersContainer from '@/components/orders/OrdersContainer';
 import DashboardSummary from '@/components/dashboard/DashboardSummary';
 import { mockOrders } from '@/data/mockOrders';
 import { usePreferences } from '@/hooks/use-preferences';
+import AppLayout from '@/components/layout/AppLayout';
+import { motion } from 'framer-motion';
 
 const Index = () => {
   const { preferences } = usePreferences();
@@ -21,23 +22,31 @@ const Index = () => {
   const spacingClass = preferences.compactView ? 'space-y-4' : 'space-y-8';
   
   return (
-    <div className="flex h-screen bg-gray-50/70 backdrop-blur-sm overflow-hidden">
-      <AppSidebar />
+    <AppLayout>
+      <AppTopbar title="Tableau de bord" />
       
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <AppTopbar title="Tableau de bord" />
-        
-        <main className={`flex-1 overflow-auto p-6 md:p-8 ${getFontSizeClass()}`}>
-          <div className={`animate-fade-in ${spacingClass}`}>
-            {/* Dashboard Summary Section */}
+      <main className={`flex-1 overflow-auto p-6 md:p-8 ${getFontSizeClass()}`}>
+        <div className={`${spacingClass}`}>
+          {/* Dashboard Summary Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+          >
             <DashboardSummary orders={mockOrders} />
-            
-            {/* Orders Section */}
+          </motion.div>
+          
+          {/* Orders Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+          >
             <OrdersContainer orders={mockOrders} />
-          </div>
-        </main>
-      </div>
-    </div>
+          </motion.div>
+        </div>
+      </main>
+    </AppLayout>
   );
 };
 

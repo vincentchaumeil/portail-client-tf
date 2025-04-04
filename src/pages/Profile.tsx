@@ -1,95 +1,130 @@
-
 import React from 'react';
-import AppSidebar from '@/components/layout/AppSidebar';
 import AppTopbar from '@/components/layout/AppTopbar';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { usePreferences } from '@/hooks/use-preferences';
-import { Label } from '@/components/ui/label';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { Switch } from '@/components/ui/switch';
-import { ALargeSmall, Image } from 'lucide-react';
+import AppLayout from '@/components/layout/AppLayout';
+import { motion } from 'framer-motion';
 
+// Update this component with your actual implementation
 const Profile = () => {
-  const { preferences, updatePreferences } = usePreferences();
-  
   return (
-    <div className="flex h-screen bg-gray-50/70 backdrop-blur-sm overflow-hidden">
-      <AppSidebar />
-      
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <AppTopbar title="Profil & Préférences" />
-        
-        <main className="flex-1 overflow-auto p-8">
-          <div className="max-w-2xl mx-auto animate-fade-in">
-            <Card>
-              <CardHeader>
-                <CardTitle>Préférences d'affichage</CardTitle>
-                <CardDescription>
-                  Personnalisez l'apparence et le comportement de l'application
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="font-size" className="text-base">Taille de police</Label>
-                    <ALargeSmall className="text-muted-foreground h-5 w-5" />
-                  </div>
-                  <ToggleGroup 
-                    type="single" 
-                    value={preferences.fontSize}
-                    onValueChange={(value) => {
-                      if (value) updatePreferences({ fontSize: value as 'small' | 'medium' | 'large' });
-                    }}
-                    className="justify-start"
-                  >
-                    <ToggleGroupItem value="small" aria-label="Small text">
-                      <span className="text-sm">A</span>
-                    </ToggleGroupItem>
-                    <ToggleGroupItem value="medium" aria-label="Medium text">
-                      <span className="text-base">A</span>
-                    </ToggleGroupItem>
-                    <ToggleGroupItem value="large" aria-label="Large text">
-                      <span className="text-lg">A</span>
-                    </ToggleGroupItem>
-                  </ToggleGroup>
-                </div>
-                
-                <div className="flex items-center justify-between space-x-2">
-                  <div className="flex flex-col space-y-1">
-                    <Label htmlFor="show-logo" className="text-base">Afficher le logo</Label>
-                    <p className="text-sm text-muted-foreground">
-                      Affiche le logo de l'entreprise dans la barre latérale
-                    </p>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Image className="text-muted-foreground h-5 w-5" />
-                    <Switch
-                      id="show-logo"
-                      checked={preferences.showLogo}
-                      onCheckedChange={(checked) => updatePreferences({ showLogo: checked })}
-                    />
-                  </div>
-                </div>
-                
-                <div className="flex items-center justify-between space-x-2">
-                  <div className="flex flex-col space-y-1">
-                    <Label htmlFor="compact-view" className="text-base">Vue compacte</Label>
-                    <p className="text-sm text-muted-foreground">
-                      Réduit l'espacement et affiche plus de contenu à l'écran
-                    </p>
-                  </div>
-                  <Switch
-                    id="compact-view"
-                    checked={preferences.compactView}
-                    onCheckedChange={(checked) => updatePreferences({ compactView: checked })}
-                  />
-                </div>
-              </CardContent>
-            </Card>
+    <AppLayout>
+      <AppTopbar title="Profil" />
+      <motion.div 
+        className="flex-1 overflow-auto p-6 md:p-8"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+      >
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 className="text-xl font-semibold mb-4">Informations personnelles</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Nom</label>
+                <input 
+                  type="text" 
+                  className="w-full p-2 border border-gray-300 rounded-md" 
+                  defaultValue="Admin"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input 
+                  type="email" 
+                  className="w-full p-2 border border-gray-300 rounded-md" 
+                  defaultValue="admin@surfacetreatment.com"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone</label>
+                <input 
+                  type="tel" 
+                  className="w-full p-2 border border-gray-300 rounded-md" 
+                  defaultValue="+33 1 23 45 67 89"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Rôle</label>
+                <select className="w-full p-2 border border-gray-300 rounded-md">
+                  <option>Administrateur</option>
+                  <option>Utilisateur</option>
+                  <option>Technicien</option>
+                </select>
+              </div>
+            </div>
           </div>
-        </main>
-      </div>
-    </div>
+          
+          <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+            <h2 className="text-xl font-semibold mb-4">Préférences d'affichage</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Taille de police</label>
+                <div className="flex gap-4">
+                  <label className="flex items-center">
+                    <input type="radio" name="fontSize" className="mr-2" defaultChecked />
+                    <span>Normal</span>
+                  </label>
+                  <label className="flex items-center">
+                    <input type="radio" name="fontSize" className="mr-2" />
+                    <span>Grand</span>
+                  </label>
+                  <label className="flex items-center">
+                    <input type="radio" name="fontSize" className="mr-2" />
+                    <span>Petit</span>
+                  </label>
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Mode d'affichage</label>
+                <div className="flex gap-4">
+                  <label className="flex items-center">
+                    <input type="checkbox" className="mr-2" />
+                    <span>Vue compacte</span>
+                  </label>
+                  <label className="flex items-center">
+                    <input type="checkbox" className="mr-2" defaultChecked />
+                    <span>Afficher le logo</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h2 className="text-xl font-semibold mb-4">Sécurité</h2>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe actuel</label>
+                <input 
+                  type="password" 
+                  className="w-full p-2 border border-gray-300 rounded-md" 
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Nouveau mot de passe</label>
+                <input 
+                  type="password" 
+                  className="w-full p-2 border border-gray-300 rounded-md" 
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Confirmer le mot de passe</label>
+                <input 
+                  type="password" 
+                  className="w-full p-2 border border-gray-300 rounded-md" 
+                />
+              </div>
+              
+              <div className="pt-2">
+                <button className="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-dark transition-colors">
+                  Mettre à jour le mot de passe
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </AppLayout>
   );
 };
 
