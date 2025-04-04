@@ -1,50 +1,79 @@
 
 import React from 'react';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import StatusBadge from './StatusBadge';
-import ProgressBar from './ProgressBar';
-import { cn } from '@/lib/utils';
 import { Order } from '@/types';
-import { CalendarDays, Hash } from 'lucide-react';
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
+import { ArrowRight } from 'lucide-react';
+import { usePreferences } from '@/hooks/use-preferences';
 
 interface OrderCardProps {
   order: Order;
-  isActive: boolean;
   onClick: () => void;
+  isActive: boolean;
 }
 
-const OrderCard: React.FC<OrderCardProps> = ({ order, isActive, onClick }) => {
+const OrderCard: React.FC<OrderCardProps> = ({ order, onClick, isActive }) => {
+  const { preferences } = usePreferences();
+  
+  const getFontSizeClass = () => {
+    switch(preferences.fontSize) {
+      case 'small': return 'text-xs';
+      case 'large': return 'text-base';
+      default: return 'text-sm';
+    }
+  };
+  
+  const compactClass = preferences.compactView ? 'py-2' : 'py-3';
+  
   return (
-    <div 
-      className={cn(
-        "bg-white border rounded-xl p-6 cursor-pointer transition-all duration-300 hover:shadow-md hover:translate-y-[-2px]",
-        isActive ? "ring-2 ring-primary shadow-md" : "shadow-sm"
-      )}
+    <Card 
       onClick={onClick}
+      className={`cursor-pointer transition-all hover:shadow-md ${
+        isActive 
+          ? 'ring-2 ring-primary/50 shadow-lg bg-gradient-to-r from-blue-50/80 to-transparent' 
+          : 'hover:bg-gray-50'
+      }`}
     >
-      <div className="between-flex mb-4">
-        <h3 className="text-lg font-semibold text-primary-dark bg-gradient-to-r from-primary-dark to-primary bg-clip-text text-transparent">Commande #{order.orderNumber}</h3>
-        <StatusBadge status={order.status} />
-      </div>
-      
-      <div className="mb-4">
-        <p className="text-sm text-muted-foreground mb-1">Progression</p>
-        <div className="between-flex">
-          <ProgressBar percentage={order.progressPercentage} />
-          <span className="ml-3 font-medium text-sm">{order.progressPercentage}%</span>
+      <CardHeader className={`pb-0 px-4 ${compactClass}`}>
+        <div className="flex justify-between items-start">
+          <div>
+            <h3 className={`font-bold ${getFontSizeClass()}`}>{order.orderNumber}</h3>
+            <p className={`text-muted-foreground ${
+              preferences.fontSize === 'small' ? 'text-xs' : 'text-sm'
+            }`}>
+              {order.reference}
+            </p>
+          </div>
+          <StatusBadge status={order.status} />
         </div>
-      </div>
-      
-      <div className="flex flex-col space-y-2 mt-5 text-sm text-muted-foreground">
-        <div className="flex items-center">
-          <CalendarDays size={14} className="mr-2 text-gray-400" />
-          <span>{order.date}</span>
+      </CardHeader>
+      <CardContent className={`px-4 ${compactClass}`}>
+        <div className="flex justify-between items-center">
+          <div>
+            <p className={`text-muted-foreground ${getFontSizeClass()}`}>
+              {format(new Date(order.date), 'PPP', { locale: fr })}
+            </p>
+            <p className={`font-medium ${getFontSizeClass()}`}>{order.clientName}</p>
+            
+            {/* Treatment info if available */}
+            {order.treatment && (
+              <div className="mt-2 py-1 px-2 bg-blue-50 rounded-md border border-blue-100 inline-flex items-center">
+                <span className={`text-primary ${
+                  preferences.fontSize === 'small' ? 'text-xs' : 'text-sm'
+                }`}>
+                  {order.treatment.name}
+                </span>
+              </div>
+            )}
+          </div>
+          {isActive && (
+            <ArrowRight className="text-primary h-5 w-5 animate-pulse" />
+          )}
         </div>
-        <div className="flex items-center">
-          <Hash size={14} className="mr-2 text-gray-400" />
-          <span>Ref: {order.reference}</span>
-        </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 

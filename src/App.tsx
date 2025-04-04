@@ -7,6 +7,9 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import SupportChat from "./pages/SupportChat";
+import Treatments from "./pages/Treatments";
+import Profile from "./pages/Profile";
+import { PreferencesProvider } from "./hooks/use-preferences";
 
 // Create a client
 const queryClient = new QueryClient({
@@ -20,17 +23,21 @@ const queryClient = new QueryClient({
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/support" element={<SupportChat />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <PreferencesProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/support" element={<SupportChat />} />
+            <Route path="/treatments" element={<Treatments />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </PreferencesProvider>
   </QueryClientProvider>
 );
 

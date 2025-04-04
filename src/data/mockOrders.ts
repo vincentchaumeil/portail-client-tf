@@ -1,7 +1,7 @@
-
 import { Order } from '@/types';
+import { assignTreatmentsToOrders } from './mockTreatments';
 
-export const mockOrders: Order[] = [
+const baseOrders: Order[] = [
   {
     id: '1',
     orderNumber: 'CMD-2023-001',
@@ -108,3 +108,5 @@ export const mockOrders: Order[] = [
     ]
   }
 ];
+
+export const mockOrders = assignTreatmentsToOrders(baseOrders);
