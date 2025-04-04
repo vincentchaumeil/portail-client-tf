@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { Card } from '@/components/ui/card';
 import { mockOrders } from '@/data/mockOrders';
 import { mockTreatments, getOrdersByTreatment } from '@/data/mockTreatments';
-import { Treatment as TreatmentType, Order } from '@/types';
+import { Treatment, TreatmentType, Order } from '@/types';
 import OrderCard from '@/components/orders/OrderCard';
 import OrderDetailPanel from '@/components/orders/OrderDetailPanel';
 
@@ -109,13 +109,7 @@ const Treatments = () => {
 
 // Treatment card component
 interface TreatmentCardProps {
-  treatment: {
-    id: string;
-    name: TreatmentType;
-    description: string;
-    duration: number;
-    price: number;
-  };
+  treatment: Treatment;
   isSelected: boolean;
   onClick: () => void;
   ordersCount: number;
