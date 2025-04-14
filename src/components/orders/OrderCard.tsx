@@ -29,7 +29,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onClick, isActive, classNa
     }
   };
   
-  const compactClass = preferences.compactView ? 'py-2' : 'py-3';
+  const compactClass = preferences.compactView ? 'py-3' : 'py-4';
   
   // Parse the date string to a Date object before formatting
   const parseDate = (dateString: string) => {
@@ -48,20 +48,25 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onClick, isActive, classNa
   
   return (
     <motion.div
-      whileHover={{ scale: 1.01 }}
-      whileTap={{ scale: 0.99 }}
-      transition={{ type: "spring", stiffness: 400, damping: 17 }}
+      whileHover={{ y: -4 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ 
+        type: "spring", 
+        stiffness: 400, 
+        damping: 25,
+        mass: 0.5
+      }}
       className={className}
     >
       <Card 
         onClick={onClick}
-        className={cn(`cursor-pointer transition-all hover:shadow-md ${
+        className={cn(`cursor-pointer transition-all border-transparent ${
           isActive 
-            ? 'ring-2 ring-primary/50 shadow-lg bg-gradient-to-r from-blue-50/80 to-transparent' 
-            : 'hover:bg-gray-50'
+            ? 'ring-2 ring-primary/30 shadow-lg bg-gradient-to-br from-blue-50/80 to-transparent' 
+            : 'hover:shadow-md hover:border-gray-100'
         }`, className)}
       >
-        <CardHeader className={`pb-0 px-4 ${compactClass}`}>
+        <CardHeader className={`pb-1 px-5 ${compactClass}`}>
           <div className="flex justify-between items-start">
             <div>
               <h3 className={`font-bold ${getFontSizeClass()}`}>{order.orderNumber}</h3>
@@ -74,8 +79,8 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onClick, isActive, classNa
             <StatusBadge status={order.status} />
           </div>
         </CardHeader>
-        <CardContent className={`px-4 ${compactClass}`}>
-          <div className="flex justify-between items-center mb-2">
+        <CardContent className={`px-5 ${compactClass} space-y-3`}>
+          <div className="flex justify-between items-center">
             <div>
               <p className={`text-muted-foreground ${getFontSizeClass()}`}>
                 {format(parseDate(order.date), 'PPP', { locale: fr })}
@@ -84,7 +89,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onClick, isActive, classNa
               
               {/* Treatment info if available */}
               {order.treatment && (
-                <div className="mt-2 py-1 px-2 bg-blue-50 rounded-md border border-blue-100 inline-flex items-center">
+                <div className="mt-2 py-1 px-2 bg-blue-50/80 rounded-md border border-blue-100/80 inline-flex items-center">
                   <span className={`text-primary ${
                     preferences.fontSize === 'small' ? 'text-xs' : 'text-sm'
                   }`}>
@@ -105,8 +110,8 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onClick, isActive, classNa
           </div>
           
           {/* Progress bar */}
-          <div className="mt-3">
-            <div className="flex justify-between items-center mb-1">
+          <div className="mt-1">
+            <div className="flex justify-between items-center mb-1.5">
               <span className={`text-xs text-gray-500 ${getFontSizeClass()}`}>Progression</span>
               <span className={`text-xs font-medium ${getFontSizeClass()}`}>{order.progressPercentage}%</span>
             </div>

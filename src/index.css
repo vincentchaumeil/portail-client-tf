@@ -53,6 +53,8 @@
 
   body {
     @apply bg-page text-default font-inter;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   /* Custom utility classes */
@@ -66,5 +68,33 @@
 
   .between-flex {
     @apply flex items-center justify-between;
+  }
+  
+  /* Apple-like smooth scrolling */
+  .smooth-scroll {
+    @apply overflow-y-auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  /* Subtle card hover effect */
+  .hover-lift {
+    @apply transition-all duration-200;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+  }
+  
+  /* Progress bar animation */
+  @keyframes progress-fill {
+    from { width: 0; }
+    to { width: var(--progress-value); }
+  }
+  
+  .animate-progress {
+    animation: progress-fill 1s ease-out forwards;
   }
 }

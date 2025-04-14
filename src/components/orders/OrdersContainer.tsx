@@ -15,11 +15,11 @@ const OrdersContainer: React.FC<OrdersContainerProps> = ({
   selectedOrderId = null
 }) => {
   return (
-    <div>
-      <h2 className="text-xl font-semibold mb-6">Commandes récentes</h2>
+    <div className="px-1">
+      <h2 className="text-xl font-semibold mb-8 pl-1">Commandes récentes</h2>
       
       {orders.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {orders.map(order => (
             <OrderCard 
               key={order.id} 
@@ -31,7 +31,7 @@ const OrdersContainer: React.FC<OrdersContainerProps> = ({
           ))}
         </div>
       ) : (
-        <div className="bg-gray-50 p-8 rounded-lg text-center">
+        <div className="bg-gray-50/70 backdrop-blur-sm p-10 rounded-xl text-center border border-gray-100/60">
           <p className="text-gray-500">Aucune commande trouvée</p>
         </div>
       )}
