@@ -6,6 +6,8 @@ import { Order } from '@/types';
 
 interface DashboardSummaryProps {
   orders: Order[];
+  onStatusClick?: (status: string | null) => void;
+  activeStatus?: string | null;
 }
 
 interface StatCardProps {
@@ -13,10 +15,17 @@ interface StatCardProps {
   value: number;
   icon: React.ReactNode;
   color: string;
+  onClick?: () => void;
+  isActive?: boolean;
 }
 
-const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color }) => (
-  <Card className="shadow-card hover:shadow-card-hover transition-all-300">
+const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color, onClick, isActive }) => (
+  <Card 
+    className={`shadow-card hover:shadow-card-hover transition-all-300 cursor-pointer ${
+      isActive ? 'ring-2 ring-primary/50' : ''
+    }`}
+    onClick={onClick}
+  >
     <CardContent className="p-6">
       <div className="flex items-center justify-between">
         <div>
@@ -31,7 +40,11 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, icon, color }) => (
   </Card>
 );
 
-const DashboardSummary: React.FC<DashboardSummaryProps> = ({ orders }) => {
+const DashboardSummary: React.FC<DashboardSummaryProps> = ({ 
+  orders,
+  onStatusClick = () => {},
+  activeStatus = null
+}) => {
   const stats = useMemo(() => {
     const total = orders.length;
     const inProgress = orders.filter(order => order.status === 'en cours').length;
@@ -51,6 +64,8 @@ const DashboardSummary: React.FC<DashboardSummaryProps> = ({ orders }) => {
           value={stats.total} 
           icon={<BarChart3 className="h-6 w-6 text-white" />} 
           color="bg-primary-dark"
+          onClick={() => onStatusClick(null)}
+          isActive={activeStatus === null}
         />
         
         <StatCard 
@@ -58,6 +73,8 @@ const DashboardSummary: React.FC<DashboardSummaryProps> = ({ orders }) => {
           value={stats.inProgress} 
           icon={<Package className="h-6 w-6 text-white" />} 
           color="bg-primary"
+          onClick={() => onStatusClick('en cours')}
+          isActive={activeStatus === 'en cours'}
         />
         
         <StatCard 
@@ -65,6 +82,8 @@ const DashboardSummary: React.FC<DashboardSummaryProps> = ({ orders }) => {
           value={stats.shipped} 
           icon={<Truck className="h-6 w-6 text-white" />} 
           color="bg-highlight"
+          onClick={() => onStatusClick('expédiée')}
+          isActive={activeStatus === 'expédiée'}
         />
         
         <StatCard 
@@ -72,6 +91,8 @@ const DashboardSummary: React.FC<DashboardSummaryProps> = ({ orders }) => {
           value={stats.delivered} 
           icon={<CheckCircle className="h-6 w-6 text-white" />} 
           color="bg-green-500"
+          onClick={() => onStatusClick('livrée')}
+          isActive={activeStatus === 'livrée'}
         />
       </div>
     </div>

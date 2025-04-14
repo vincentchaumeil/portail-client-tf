@@ -9,14 +9,16 @@ import { ArrowRight } from 'lucide-react';
 import { usePreferences } from '@/hooks/use-preferences';
 import { motion } from 'framer-motion';
 import { Progress } from '@/components/ui/progress';
+import { cn } from '@/lib/utils';
 
 interface OrderCardProps {
   order: Order;
   onClick: () => void;
   isActive: boolean;
+  className?: string;
 }
 
-const OrderCard: React.FC<OrderCardProps> = ({ order, onClick, isActive }) => {
+const OrderCard: React.FC<OrderCardProps> = ({ order, onClick, isActive, className }) => {
   const { preferences } = usePreferences();
   
   const getFontSizeClass = () => {
@@ -49,14 +51,15 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onClick, isActive }) => {
       whileHover={{ scale: 1.01 }}
       whileTap={{ scale: 0.99 }}
       transition={{ type: "spring", stiffness: 400, damping: 17 }}
+      className={className}
     >
       <Card 
         onClick={onClick}
-        className={`cursor-pointer transition-all hover:shadow-md ${
+        className={cn(`cursor-pointer transition-all hover:shadow-md ${
           isActive 
             ? 'ring-2 ring-primary/50 shadow-lg bg-gradient-to-r from-blue-50/80 to-transparent' 
             : 'hover:bg-gray-50'
-        }`}
+        }`, className)}
       >
         <CardHeader className={`pb-0 px-4 ${compactClass}`}>
           <div className="flex justify-between items-start">

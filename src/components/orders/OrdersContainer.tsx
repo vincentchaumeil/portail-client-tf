@@ -26,6 +26,7 @@ const OrdersContainer: React.FC<OrdersContainerProps> = ({
               order={order}
               isActive={selectedOrderId === order.id}
               onClick={() => onSelectOrder(order.id)}
+              className="order-card"
             />
           ))}
         </div>

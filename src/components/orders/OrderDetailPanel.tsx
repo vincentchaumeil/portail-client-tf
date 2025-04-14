@@ -7,19 +7,22 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { format, parse } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import { cn } from '@/lib/utils';
 
 interface OrderDetailPanelProps {
   order: Order | null;
   onClose: () => void;
   onPrevious: () => void;
   onNext: () => void;
+  className?: string;
 }
 
 const OrderDetailPanel: React.FC<OrderDetailPanelProps> = ({ 
   order, 
   onClose, 
   onPrevious,
-  onNext
+  onNext,
+  className
 }) => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -46,7 +49,7 @@ const OrderDetailPanel: React.FC<OrderDetailPanelProps> = ({
   if (!order) return null;
 
   return (
-    <div className="fixed inset-y-0 right-0 w-1/3 bg-white/95 backdrop-blur-sm shadow-detail-panel p-8 animate-slide-in-right overflow-y-auto border-l border-gray-100">
+    <div className={cn("fixed inset-y-0 right-0 w-1/3 bg-white/95 backdrop-blur-sm shadow-detail-panel p-8 animate-slide-in-right overflow-y-auto border-l border-gray-100", className)}>
       <div className="flex justify-between items-center mb-6">
         <div>
           <h2 className="text-2xl font-semibold bg-gradient-to-r from-primary-dark to-primary bg-clip-text text-transparent">

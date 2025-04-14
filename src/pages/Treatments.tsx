@@ -9,14 +9,21 @@ import { mockTreatments, getOrdersByTreatment } from '@/data/mockTreatments';
 import { Treatment, TreatmentType, Order } from '@/types';
 import OrderCard from '@/components/orders/OrderCard';
 import OrderDetailPanel from '@/components/orders/OrderDetailPanel';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Search, X } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 
 const Treatments = () => {
   const [selectedTreatment, setSelectedTreatment] = useState<TreatmentType | null>(null);
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>('');
   
+  // Filter orders by treatment and search query
   const filteredOrders = selectedTreatment 
-    ? getOrdersByTreatment(mockOrders, selectedTreatment)
+    ? getOrdersByTreatment(mockOrders, selectedTreatment).filter(order => 
+        order.orderNumber.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        order.reference.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        order.clientName.toLowerCase().includes(searchQuery.toLowerCase())
+      )
     : [];
   
   const selectedOrder = selectedOrderId
@@ -40,6 +47,18 @@ const Treatments = () => {
     }
   };
 
+  // Handle click outside to close detail panel
+  const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement;
+    // If clicking on an element inside the detail panel, don't close it
+    if (target.closest('.order-detail-panel')) return;
+    
+    // If clicking on an order card, don't close the panel as the card's onClick will handle it
+    if (target.closest('.order-card')) return;
+    
+    setSelectedOrderId(null);
+  };
+
   return (
     <AppLayout>
       <AppTopbar title="Traitements" />
@@ -48,6 +67,7 @@ const Treatments = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
+        onClick={handleOutsideClick}
       >
         <div className="max-w-7xl mx-auto">
           <h1 className="text-2xl font-bold mb-6">Traitements disponibles</h1>
@@ -74,6 +94,26 @@ const Treatments = () => {
                 <h2 className="text-xl font-semibold">
                   Commandes avec traitement "{selectedTreatment}" ({filteredOrders.length})
                 </h2>
+                
+                {/* Search bar */}
+                <div className="relative w-64">
+                  <Input
+                    type="text"
+                    placeholder="Rechercher une commande..."
+                    className="pl-10 pr-8"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                  <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  {searchQuery && (
+                    <button 
+                      onClick={() => setSearchQuery('')}
+                      className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
+                    >
+                      <X className="h-4 w-4" />
+                    </button>
+                  )}
+                </div>
               </div>
               
               {filteredOrders.length > 0 ? (
@@ -84,6 +124,7 @@ const Treatments = () => {
                       order={order}
                       isActive={selectedOrderId === order.id}
                       onClick={() => setSelectedOrderId(prevId => prevId === order.id ? null : order.id)}
+                      className="order-card"
                     />
                   ))}
                 </div>
@@ -103,6 +144,7 @@ const Treatments = () => {
         onClose={() => setSelectedOrderId(null)}
         onPrevious={handlePreviousOrder}
         onNext={handleNextOrder}
+        className="order-detail-panel"
       />
     </AppLayout>
   );
@@ -175,4 +217,3 @@ const TreatmentCard: React.FC<TreatmentCardProps> = ({ treatment, isSelected, on
 };
 
 export default Treatments;
-
