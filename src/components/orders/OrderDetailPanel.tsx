@@ -62,6 +62,7 @@ const OrderDetailPanel: React.FC<OrderDetailPanelProps> = ({
             damping: 30
           }}
           className={cn("fixed inset-y-0 right-0 w-1/3 bg-white/90 backdrop-blur-sm shadow-detail-panel p-10 overflow-y-auto border-l border-gray-100/60", className)}
+          style={{ paddingTop: "calc(4rem + 16px)" }} /* Additional top padding to account for the header */
         >
           <div className="flex justify-between items-center mb-8">
             <div>
