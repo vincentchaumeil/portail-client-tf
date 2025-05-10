@@ -19,14 +19,14 @@ const OrdersContainer: React.FC<OrdersContainerProps> = ({
       <h2 className="text-xl font-semibold mb-8 pl-1">Commandes récentes</h2>
       
       {orders.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+        <div className="flex flex-col space-y-4">
           {orders.map(order => (
             <OrderCard 
               key={order.id} 
               order={order}
               isActive={selectedOrderId === order.id}
               onClick={() => onSelectOrder(order.id)}
-              className="order-card"
+              className="order-card w-full"
             />
           ))}
         </div>

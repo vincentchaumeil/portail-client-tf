@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import StatusBadge from './StatusBadge';
 import { Order } from '@/types';
 import { format, parse } from 'date-fns';
@@ -48,8 +48,8 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onClick, isActive, classNa
   
   return (
     <motion.div
-      whileHover={{ y: -4 }}
-      whileTap={{ scale: 0.98 }}
+      whileHover={{ y: -2 }}
+      whileTap={{ scale: 0.99 }}
       transition={{ 
         type: "spring", 
         stiffness: 400, 
@@ -72,9 +72,10 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onClick, isActive, classNa
             : '0 4px 10px -3px rgba(0, 0, 0, 0.02)'
         }}
       >
-        <CardHeader className={`pb-1 px-5 ${compactClass}`}>
-          <div className="flex justify-between items-start">
-            <div>
+        <CardContent className={`px-5 ${compactClass} flex items-center justify-between`}>
+          <div className="flex flex-col md:flex-row md:items-center md:gap-8 flex-grow">
+            {/* Order number and reference */}
+            <div className="min-w-[200px]">
               <h3 className={`font-bold ${getFontSizeClass()}`}>{order.orderNumber}</h3>
               <p className={`text-muted-foreground ${
                 preferences.fontSize === 'small' ? 'text-xs' : 'text-sm'
@@ -82,46 +83,51 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onClick, isActive, classNa
                 {order.reference.length > 25 ? `${order.reference.substring(0, 25)}...` : order.reference}
               </p>
             </div>
-            <StatusBadge status={order.status} />
-          </div>
-        </CardHeader>
-        <CardContent className={`px-5 ${compactClass} space-y-3`}>
-          <div className="flex justify-between items-center">
-            <div>
+            
+            {/* Client name and date */}
+            <div className="min-w-[150px] mt-2 md:mt-0">
+              <p className={`font-medium ${getFontSizeClass()}`}>{order.clientName}</p>
               <p className={`text-muted-foreground ${getFontSizeClass()}`}>
                 {format(parseDate(order.date), 'PPP', { locale: fr })}
               </p>
-              <p className={`font-medium ${getFontSizeClass()}`}>{order.clientName}</p>
-              
-              {/* Treatment info if available */}
-              {order.treatment && (
-                <div className="mt-2 py-1 px-2 bg-blue-50/80 rounded-md border border-blue-100/80 inline-flex items-center">
+            </div>
+            
+            {/* Treatment info if available */}
+            {order.treatment && (
+              <div className="mt-2 md:mt-0">
+                <div className="py-1 px-2 bg-blue-50/80 rounded-md border border-blue-100/80 inline-flex items-center">
                   <span className={`text-primary ${
                     preferences.fontSize === 'small' ? 'text-xs' : 'text-sm'
                   }`}>
                     {order.treatment.name}
                   </span>
                 </div>
-              )}
+              </div>
+            )}
+          </div>
+          
+          <div className="flex items-center gap-6">
+            {/* Progress bar */}
+            <div className="hidden md:block w-[120px]">
+              <div className="flex justify-between items-center mb-1.5">
+                <span className={`text-xs text-gray-500 ${getFontSizeClass()}`}>Progression</span>
+                <span className={`text-xs font-medium ${getFontSizeClass()}`}>{order.progressPercentage}%</span>
+              </div>
+              <Progress value={order.progressPercentage} className="h-1.5" />
             </div>
+            
+            <StatusBadge status={order.status} />
+            
             {isActive && (
               <motion.div
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.3 }}
+                className="ml-2"
               >
                 <ArrowRight className="text-primary h-5 w-5" />
               </motion.div>
             )}
-          </div>
-          
-          {/* Progress bar */}
-          <div className="mt-1">
-            <div className="flex justify-between items-center mb-1.5">
-              <span className={`text-xs text-gray-500 ${getFontSizeClass()}`}>Progression</span>
-              <span className={`text-xs font-medium ${getFontSizeClass()}`}>{order.progressPercentage}%</span>
-            </div>
-            <Progress value={order.progressPercentage} className="h-1.5" />
           </div>
         </CardContent>
       </Card>
