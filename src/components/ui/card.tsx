@@ -13,6 +13,11 @@ const Card = React.forwardRef<
       "rounded-xl border border-gray-100/60 bg-card text-card-foreground shadow-sm backdrop-blur-[2px]",
       className
     )}
+    style={{
+      backdropFilter: 'blur(8px)',
+      boxShadow: '0 4px 12px rgba(0, 0, 0, 0.03)',
+      transition: 'all 0.2s ease'
+    }}
     {...props}
   />
 ))

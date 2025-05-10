@@ -65,6 +65,12 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onClick, isActive, classNa
             ? 'ring-2 ring-primary/30 shadow-lg bg-gradient-to-br from-blue-50/80 to-transparent' 
             : 'hover:shadow-md hover:border-gray-100'
         }`, className)}
+        style={{ 
+          borderRadius: '16px',
+          boxShadow: isActive 
+            ? '0 10px 25px -5px rgba(0, 0, 0, 0.05)'
+            : '0 4px 10px -3px rgba(0, 0, 0, 0.02)'
+        }}
       >
         <CardHeader className={`pb-1 px-5 ${compactClass}`}>
           <div className="flex justify-between items-start">
@@ -73,7 +79,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order, onClick, isActive, classNa
               <p className={`text-muted-foreground ${
                 preferences.fontSize === 'small' ? 'text-xs' : 'text-sm'
               }`}>
-                {order.reference}
+                {order.reference.length > 25 ? `${order.reference.substring(0, 25)}...` : order.reference}
               </p>
             </div>
             <StatusBadge status={order.status} />

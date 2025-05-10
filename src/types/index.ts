@@ -25,7 +25,17 @@ export interface Treatment {
   price: number;
 }
 
-export type TreatmentType = 'Alodine' | 'Silvering' | 'Cadmium plating' | 'Copper plating' | 'Gilding' | 'Tin-Lead plating' | 'Tinning';
+export type TreatmentType = 
+  'Passivation sur Inox' | 
+  'Passivation Inox à l\'attache' | 
+  'Passivation sur inox Methode 1' | 
+  'Décapage' | 
+  'Décapage et passivation' | 
+  'Désoxydation sur Inconel' | 
+  'Détraitement + OAS Bleue' | 
+  'OAS Bleue - À l\'attache' | 
+  'Ni(II) + Sn' | 
+  'Sablage + Ag';
 
 export interface UserPreferences {
   fontSize: 'small' | 'medium' | 'large';
